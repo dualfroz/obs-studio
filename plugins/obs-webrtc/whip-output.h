@@ -16,8 +16,6 @@
 
 struct videoLayerState {
 	uint16_t sequenceNumber;
-	uint32_t rtpTimestamp;
-	int64_t lastVideoTimestamp;
 	uint32_t ssrc;
 	std::string rid;
 };
@@ -45,7 +43,7 @@ private:
 	void SendDelete();
 	void StopThread(bool signal);
 	void ParseLinkHeader(std::string linkHeader, std::vector<rtc::IceServer> &iceServers);
-	void Send(void *data, uintptr_t size, uint64_t duration, std::shared_ptr<rtc::Track> track,
+	void Send(struct encoder_packet *packet, uint32_t start_timestamp, std::shared_ptr<rtc::Track> track,
 		  std::shared_ptr<rtc::RtcpSrReporter> rtcp_sr_reporter);
 
 	obs_output_t *output;
@@ -71,7 +69,6 @@ private:
 	std::atomic<size_t> total_bytes_sent;
 	std::atomic<int> connect_time_ms;
 	int64_t start_time_ns;
-	int64_t last_audio_timestamp;
 };
 
 void register_whip_output();
